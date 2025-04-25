@@ -25,7 +25,6 @@ class AuthController{
      *
      */
 
-
     if (empty((array) $requestBody)) {
         echo json_encode([
             "status" => "Failed",
@@ -35,9 +34,9 @@ class AuthController{
         return;
 
     }
-    
-    
-    if (empty($requestBody->fname)) {
+
+
+    if (empty($requestBody['fname'])) {
 
         echo json_encode([
             "status" => "Failed",
@@ -45,7 +44,7 @@ class AuthController{
         ]);
 
         return;
-    } else if (empty($requestBody->lname)) {
+    } else if (empty($requestBody['lname'])) {
 
         echo json_encode([
             "status" => "Failed",
@@ -53,7 +52,7 @@ class AuthController{
         ]);
 
         return;
-    } else if (empty($requestBody->email)) {
+    } else if (empty($requestBody['email'])) {
 
         echo json_encode([
             "status" => "Failed",
@@ -62,7 +61,7 @@ class AuthController{
 
         return;
 
-    } else if (empty($requestBody->password)) {
+    } else if (empty($requestBody['password'])) {
 
         echo json_encode([
             "status" => "Failed",
@@ -70,7 +69,7 @@ class AuthController{
         ]);
 
         return;
-    } else if (empty($requestBody->role)) {
+    } else if (empty($requestBody['role'])) {
 
         echo json_encode([
             "status" => "Failed",

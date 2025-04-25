@@ -1,7 +1,8 @@
 <?php
 
- use controllers\auth\AuthController\AuthController;
+ use controllers\auth\AuthController\AuthController; // it doesn't work
 include_once('../controllers/auth/AuthController.php');
+
 /**
  *  User Management [API]
  * 
