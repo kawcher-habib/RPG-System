@@ -12,6 +12,9 @@ $method = $_SERVER['REQUEST_METHOD'];
 $prefix = $_GET['prefix']; /** TODO: if prefix is empty? */
 $auth = new AuthController();
 
+if($method == 'GET' && $prefix = 'users'){
+    $auth->all();    
+}
 if ($method == 'GET' && $prefix == 'login') {
 
     echo json_encode(['message' => "$prefix"]); // Test

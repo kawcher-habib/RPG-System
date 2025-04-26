@@ -1,6 +1,9 @@
 <?php
 
 namespace controllers\auth\AuthController;
+include_once __DIR__ . '/../../models/auth/AuthModel.php';
+
+use Models\Auth\AuthModel;
 
 /**
  * All about business logic here
@@ -9,6 +12,14 @@ namespace controllers\auth\AuthController;
  * 
  */
 class AuthController{
+
+    public $authModel;
+
+    public function __construct(){
+        $this->authModel =  new AuthModel();
+    }
+
+
 
     /**
      * 
@@ -84,12 +95,31 @@ class AuthController{
          *  2. connection with models
          */
 
+        
+
+        $this->authModel->create($requestBody);
+        
 
     }
 
     
 
     public function login($requestBody){
+
+    }
+
+
+    /**
+     *  Is Exist
+     */
+
+    public function isExist($email){
+
+        /**
+         *  Query
+         */
+
+         $quey = "SELECT email FROM users WHERE";
 
     }
 }
