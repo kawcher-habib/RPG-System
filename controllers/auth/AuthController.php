@@ -1,6 +1,6 @@
 <?php
 
-namespace controllers\auth\AuthController;
+namespace controllers\auth;
 include_once __DIR__ . '/../../models/auth/AuthModel.php';
 
 use Models\Auth\AuthModel;
@@ -19,6 +19,12 @@ class AuthController{
         $this->authModel =  new AuthModel();
     }
 
+
+    public function index(){
+            $usersData = $this->authModel->all();
+
+            echo json_encode($usersData);
+    }
 
 
     /**

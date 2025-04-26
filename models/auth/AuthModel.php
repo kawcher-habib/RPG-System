@@ -20,7 +20,7 @@ class AuthModel
 
     public function all()
     {
-        $query = "Select * from user";
+        $query = "Select * from users";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();

@@ -1,7 +1,9 @@
 <?php
 
- use controllers\auth\AuthController\AuthController; // it doesn't work
-include_once('../controllers/auth/AuthController.php');
+require_once __DIR__ . '/../controllers/auth/AuthController.php';
+
+use controllers\auth\AuthController; // it doesn't work
+
 
 /**
  *  User Management [API]
@@ -12,10 +14,9 @@ $method = $_SERVER['REQUEST_METHOD'];
 $prefix = $_GET['prefix']; /** TODO: if prefix is empty? */
 $auth = new AuthController();
 
-if($method == 'GET' && $prefix = 'users'){
-    $auth->all();    
-}
-if ($method == 'GET' && $prefix == 'login') {
+if ($method == 'GET' && $prefix == 'users') {
+    $auth->index();
+} else if ($method == 'GET' && $prefix == 'login') {
 
     echo json_encode(['message' => "$prefix"]); // Test
 
@@ -25,4 +26,7 @@ if ($method == 'GET' && $prefix == 'login') {
 
     $auth->registration($requestBody);
 
+} else {
+    http_response_code(404);
+    echo json_encode(['error' => 'Invalid route']);
 }
