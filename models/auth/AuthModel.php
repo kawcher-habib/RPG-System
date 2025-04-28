@@ -8,7 +8,8 @@ class AuthModel
     private $dataTable = "user";
     private $conn;
 
-    public function __construct(){
+    public function __construct()
+    {
         global $connection;
         $this->conn = $connection;
     }
@@ -25,8 +26,8 @@ class AuthModel
         $stmt->execute();
         $result = $stmt->get_result();
 
-       $users = [];
-        while($row = $result->fetch_assoc()){
+        $users = [];
+        while ($row = $result->fetch_assoc()) {
             $users[] = $row;
         }
         return $users;
@@ -40,7 +41,23 @@ class AuthModel
      */
     public function find($id)
     {
+        $queryBody = "SELECT * FROM users WHERE email=?";
+        $stmt = $this->conn->prepare($queryBody);
 
+        if(!$stmt){
+            die("Query preparation failed: " . $this->conn->error);
+        }
+
+        $stmt->bind_param('s', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($result){
+            return $result->fetch_assoc();
+        }else{
+
+            return $stmt->error; 
+
+        }
 
 
     }
@@ -54,11 +71,11 @@ class AuthModel
     public function create($requestBody)
     {
 
-        
+
         $queryBody = "INSERT INTO users(fname, lname, email, password, role)values(?,?,?,?,?)";
         $stmt = $this->conn->prepare($queryBody);
 
-        if(!$stmt){
+        if (!$stmt) {
             die("Query preparation failed: " . $this->conn->error);
         }
 
@@ -71,15 +88,15 @@ class AuthModel
             $requestBody['role']
         );
 
-        if($stmt->execute()){
+        if ($stmt->execute()) {
             echo json_encode([
-                "status"=>"Success",
-                "message"=> "User registered successfully"
+                "status" => "Success",
+                "message" => "User registered successfully"
             ]);
-        }else{
+        } else {
             echo json_encode([
-                "status"=>"Failed",
-                "message" => "Error: ". $stmt->error
+                "status" => "Failed",
+                "message" => "Error: " . $stmt->error
             ]);
         }
 

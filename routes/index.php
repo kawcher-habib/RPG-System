@@ -12,19 +12,32 @@ use controllers\auth\AuthController; // it doesn't work
 
 $method = $_SERVER['REQUEST_METHOD'];
 $prefix = $_GET['prefix']; /** TODO: if prefix is empty? */
-$auth = new AuthController();
+$authController = new AuthController();
 
 if ($method == 'GET' && $prefix == 'users') {
-    $auth->index();
-} else if ($method == 'GET' && $prefix == 'login') {
+    $authController->index();
 
-    echo json_encode(['message' => "$prefix"]); // Test
+}else if($method == 'GET' && $prefix =='logout'){
+    $authController->logout();
+
+} else if ($method == 'POST' && $prefix == 'login') {
+
+    $requestBody = json_decode(
+        file_get_contents('php://input'),
+        true
+    );
+
+    $authController->login($requestBody);
+
 
 } else if ($method == 'POST' && $prefix = 'registration') {
 
-    $requestBody = json_decode(file_get_contents('php://input'), true);
+    $requestBody = json_decode(
+        file_get_contents('php://input'),
+         true
+        );
 
-    $auth->registration($requestBody);
+    $authController->registration($requestBody);
 
 } else {
     http_response_code(404);
