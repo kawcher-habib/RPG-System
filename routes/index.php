@@ -17,7 +17,7 @@ $authController = new AuthController();
 if ($method == 'GET' && $prefix == 'users') {
     $authController->index();
 
-}else if($method == 'GET' && $prefix =='logout'){
+} else if ($method == 'GET' && $prefix == 'logout') {
     $authController->logout();
 
 } else if ($method == 'POST' && $prefix == 'login') {
@@ -30,14 +30,19 @@ if ($method == 'GET' && $prefix == 'users') {
     $authController->login($requestBody);
 
 
-} else if ($method == 'POST' && $prefix = 'registration') {
+} else if ($method == 'POST' && $prefix == 'registration') {
 
     $requestBody = json_decode(
         file_get_contents('php://input'),
-         true
-        );
+        true
+    );
 
     $authController->registration($requestBody);
+
+} else if ($method == 'POST' && $prefix == 'edit') {
+    $requestBody = json_decode(file_get_contents('php://input'), true);
+
+    $authController->update($requestBody);
 
 } else {
     http_response_code(404);

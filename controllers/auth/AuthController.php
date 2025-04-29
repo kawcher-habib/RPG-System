@@ -7,8 +7,11 @@ use Models\Auth\AuthModel;
 
 /**
  * All about business logic here
- *   1. 
+ * 
  *   1. Validation
+ *      1. input
+ *      2. user exist 
+ *      3. 
  * 
  */
 class AuthController
@@ -21,10 +24,13 @@ class AuthController
         $this->authModel = new AuthModel();
     }
 
-
+    /**
+     * Summary of index
+     * @return void
+     */
     public function index()
     {
-       
+
         $usersData = $this->authModel->all();
 
         echo json_encode($usersData);
@@ -46,6 +52,8 @@ class AuthController
          *          *. IsUser Exist?
          *
          */
+
+
 
         if (empty((array) $requestBody)) {
             echo json_encode([
@@ -106,9 +114,19 @@ class AuthController
          *  2. connection with models
          */
 
+        $isUserExist = $this->authModel->isExist($requestBody['email']);
 
 
-        $this->authModel->create($requestBody);
+        if ($isUserExist != 0) {
+            $this->authModel->create($requestBody);
+        } else {
+            echo json_encode([
+                "status" => "error",
+                "message" => "Email already exist"
+            ]);
+        }
+
+
 
 
     }
@@ -149,7 +167,7 @@ class AuthController
 
             session_start();
 
-            $_SESSION['user_data'] =[
+            $_SESSION['user_data'] = [
                 $data['fname'],
                 $data['lname'],
                 $data['email'],
@@ -157,8 +175,8 @@ class AuthController
             ];
 
             echo json_encode([
-                "status"=> "Success",
-                "message"=> "Login successful"
+                "status" => "Success",
+                "message" => "Login successful"
             ]);
 
         }
@@ -171,8 +189,9 @@ class AuthController
      * Summary of logout
      * @return void
      */
-     
-    public function logout(){
+
+    public function logout()
+    {
         session_start();
 
         session_unset();
@@ -180,26 +199,85 @@ class AuthController
         session_destroy();
 
         echo json_encode([
-            "status"=> "Success",
+            "status" => "Success",
             "message" => "Logout"
         ]);
     }
 
 
     /**
-     *  Is Exist
+     * Summary of update
+     * @param mixed $requestBody
+     * @return void
      */
-
-    public function isExist($email)
+    public function update($requestBody)
     {
 
-        /**
-         *  Query
-         */
+        if (empty((array) $requestBody)) {
+            echo json_encode([
+                "status" => "Failed",
+                "message" => "Json Body is Empty"
+            ]);
 
-        $quey = "SELECT email FROM users WHERE";
+            return;
+
+        }
+
+
+        if (empty($requestBody['fname'])) {
+
+            echo json_encode([
+                "status" => "Failed",
+                "message" => "First name require"
+            ]);
+
+            return;
+        } else if (empty($requestBody['lname'])) {
+
+            echo json_encode([
+                "status" => "Failed",
+                "message" => "Last name require"
+            ]);
+
+            return;
+        } else if (empty($requestBody['role'])) {
+
+            echo json_encode([
+                "status" => "Failed",
+                "message" => "Role require"
+            ]);
+
+            return;
+        } else if (empty($requestBody['email'])) {
+
+            echo json_encode([
+                "status" => "Failed",
+                "message" => "Email require"
+            ]);
+
+            return;
+
+        }
+
+        $mail = $requestBody['email'];
+
+        $isUserExist = $this->authModel->isExist($mail);
+
+        if ($isUserExist == 0) {
+
+            $this->authModel->update($requestBody, $mail);
+
+        } else {
+            echo json_encode([
+                "status" => "error",
+                "message" => "User doesn't exist"
+            ]);
+        }
+
 
     }
+
+
 }
 
 

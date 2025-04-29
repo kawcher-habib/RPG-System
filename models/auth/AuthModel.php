@@ -44,18 +44,18 @@ class AuthModel
         $queryBody = "SELECT * FROM users WHERE email=?";
         $stmt = $this->conn->prepare($queryBody);
 
-        if(!$stmt){
+        if (!$stmt) {
             die("Query preparation failed: " . $this->conn->error);
         }
 
         $stmt->bind_param('s', $id);
         $stmt->execute();
         $result = $stmt->get_result();
-        if($result){
+        if ($result) {
             return $result->fetch_assoc();
-        }else{
+        } else {
 
-            return $stmt->error; 
+            return $stmt->error;
 
         }
 
@@ -114,6 +114,34 @@ class AuthModel
     public function update($requestBody, $id)
     {
 
+        $queryBody = "UPDATE users SET fname=?, lname=?, `role`=? WHERE email=?";
+        $stmt = $this->conn->prepare($queryBody);
+
+        if (!$stmt) {
+            die("Query preparation failed: " . $this->conn->error);
+        }
+
+        $stmt->bind_param(
+            'ssss',
+            $requestBody['fname'],
+            $requestBody['lname'],
+            $requestBody['role'],
+            $id
+        );
+
+
+        if ($stmt->execute()) {
+            echo json_encode([
+                "status" => "Success",
+                "message" => "User updated successfully"
+            ]);
+        } else {
+            echo json_encode([
+                "status" => "Failed",
+                "message" => "Error: " . $stmt->error
+            ]);
+        }
+
     }
 
 
@@ -135,6 +163,19 @@ class AuthModel
 
     public function isExist($prefix)
     {
+        $queryBody = "SELECT email FROM users WHERE email=?";
+        $stmt = $this->conn->prepare($queryBody);
 
+        if (!$stmt) {
+
+        }
+        $stmt->bind_param('s', $prefix);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+
+        return $result->num_rows > 0 ? 0 : 1;
     }
+
+
 }
