@@ -152,6 +152,28 @@ class AuthModel
      */
     public function delete($id)
     {
+        $queryBody =  "DELETE FROM users WHERE email=?";
+        $stmt = $this->conn->prepare($queryBody);
+
+        if (!$stmt) {
+            die("Query preparation failed: " . $this->conn->error);
+        }
+
+        $stmt->bind_param('s', $id);
+
+        if($stmt->execute()){
+            echo json_encode([
+                "status" => "Success",
+                "message" => "User delete successfully"
+            ]);
+        } else {
+            echo json_encode([
+                "status" => "Failed",
+                "message" => "Error: " . $stmt->error
+            ]);
+        }
+
+
 
     }
 

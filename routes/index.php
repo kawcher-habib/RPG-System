@@ -44,7 +44,11 @@ if ($method == 'GET' && $prefix == 'users') {
 
     $authController->update($requestBody);
 
-} else {
+} else if($method == 'POST' && $prefix == 'delete'){
+    $data = json_decode(file_get_contents('php://input'), true);
+    $authController->destroy($data['email']);
+} 
+else {
     http_response_code(404);
     echo json_encode(['error' => 'Invalid route']);
 }
