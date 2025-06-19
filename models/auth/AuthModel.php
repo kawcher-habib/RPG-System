@@ -152,7 +152,7 @@ class AuthModel
      */
     public function delete($id)
     {
-        $queryBody =  "DELETE FROM users WHERE email=?";
+        $queryBody = "DELETE FROM users WHERE email=?";
         $stmt = $this->conn->prepare($queryBody);
 
         if (!$stmt) {
@@ -161,7 +161,7 @@ class AuthModel
 
         $stmt->bind_param('s', $id);
 
-        if($stmt->execute()){
+        if ($stmt->execute()) {
             echo json_encode([
                 "status" => "Success",
                 "message" => "User delete successfully"

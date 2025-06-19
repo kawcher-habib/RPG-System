@@ -283,19 +283,20 @@ class AuthController
      * @param mixed $id
      * @return void
      */
-    public function destroy($id){
+    public function destroy($id)
+    {
 
         $isUserExist = $this->authModel->isExist($id);
 
-        if($isUserExist == 0){
+        if ($isUserExist == 0) {
 
             $this->authModel->delete($id);
 
-        }else{
+        } else {
 
             echo json_encode([
-                "status"=>"error",
-                "message"=>"User doesn't exist"
+                "status" => "error",
+                "message" => "User doesn't exist"
             ]);
         }
 

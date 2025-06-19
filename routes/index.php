@@ -14,6 +14,9 @@ $method = $_SERVER['REQUEST_METHOD'];
 $prefix = $_GET['prefix']; /** TODO: if prefix is empty? */
 $authController = new AuthController();
 
+if($prefix == " "){
+  echo json_encode(['error' => "Prefix is empty"]);
+}
 if ($method == 'GET' && $prefix == 'users') {
     $authController->index();
 
@@ -44,11 +47,10 @@ if ($method == 'GET' && $prefix == 'users') {
 
     $authController->update($requestBody);
 
-} else if($method == 'POST' && $prefix == 'delete'){
+} else if ($method == 'POST' && $prefix == 'delete') {
     $data = json_decode(file_get_contents('php://input'), true);
     $authController->destroy($data['email']);
-} 
-else {
+} else {
     http_response_code(404);
     echo json_encode(['error' => 'Invalid route']);
 }
